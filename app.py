@@ -65,7 +65,9 @@ def home():
         </body>
     </html>
     """
-
+@app.route('/portfolio')
+def portfolio():
+    return "<h1>My Portfolio</h1><p>Welcome to my work showcase</p>"
 @app.route("/about")
 def about():
     return """
