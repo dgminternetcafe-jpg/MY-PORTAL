@@ -490,7 +490,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello from Render!"
+    return "<h1>Welcome to My Portal</h1><p>I build cool stuff</p>"
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
