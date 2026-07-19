@@ -25,6 +25,9 @@ if not os.path.exists(UPLOAD_FOLDER):
 @app.route("/")
 def home():
     return """
+@app.route('/portfolio')
+def portfolio():
+    return "<h1>My Portfolio</h1><p>Welcome to my work showcase</p>"
     <html>
         <head>
             <style>
