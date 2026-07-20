@@ -237,7 +237,7 @@ states_lga = {
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    app_num = "SNSN-MEM-26-" + str(random.randint(100, 999))
+    app_num = "SNSN-MEM-26-" + str(random.randint(001, 999))
     
     if request.method == 'POST':
         # Get all data
