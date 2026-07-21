@@ -131,34 +131,72 @@ def contact():
         </body>
     </html>
     """
-@app.route("/portfolio")
-def portfolio():
-    return """
+@app.route("/profile")
+def profile():
+    app_num = request.args.get('app', '')
+    
+    if not app_num:
+        return "<h1>No Application Found</h1><a href='/signup'>Register First</a>"
+    
+    # Get data from database
+    conn = sqlite3.connect('applicants.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM applicants WHERE app_num = ?", (app_num,))
+    data = c.fetchone()
+    conn.close()
+    
+    if not data:
+        return f"<h1>Application {app_num} Not Found</h1><a href='/signup'>Register</a>"
+    
+    # data order: id, app_num, name, email, phone, dob, gender, marital, religion, state, lga, country, id_type, work, passport
+    _, app_num, name, email, phone, dob, gender, marital, religion, state, lga, country, id_type, work, passport = data
+    
+    return f"""
     <html>
         <head>
             <style>
-                body {background-color: #1a1a2e; color: #ffffff; font-family: Arial; text-align: center; padding-top: 80px;}
-                h1 { color: #00ff88; font-size: 40px; }
-                .project {background-color: #0f3460; margin: 20px auto; padding: 20px; border-radius: 15px; width: 70%;}
-                a {color: #00ff88; text-decoration: none; font-size: 18px; margin: 15px;}
+                body {{background-color: #16213e; color: #ffffff; font-family: Arial; text-align: center; padding: 0; margin: 0;}}
+                .navbar {{background-color: #0f3460; padding: 15px; text-align: center;}}
+                .navbar a {{color: #00ff88; text-decoration: none; font-size: 16px; margin: 0 10px;}}
+                h1 {{ color: #ff00ff; font-size: 40px; margin-top: 40px; }}
+                .app-number {{background-color: #00ff88; color: #1a1a2e; padding: 10px 20px; border-radius: 10px; font-size: 20px; font-weight: bold; display: inline-block; margin-bottom: 20px;}}
+                .profile-card {{background-color: #1a1a2e; padding: 40px; border-radius: 15px; width: 600px; margin: 30px auto; text-align: left;}}
+                img {{border-radius: 50%; width: 120px; height: 120px; border: 4px solid #00ff88; margin-bottom: 20px; object-fit: cover; display: block; margin: 0 auto;}}
+                .info {{font-size: 18px; line-height: 2;}}
+                .info b {{color: #00ff88;}}
             </style>
         </head>
         <body>
-            <h1>My Portfolio</h1>
-            <div class="project">
-                <h2>Project 1: First Flask Website</h2>
-                <p>Built with Python + HTML + CSS. That's this site!</p>
+            <div class="navbar">
+                <a href="/">Home</a> | <a href="/signup">Sign Up</a> | <a href="/profile">Profile</a>
             </div>
-            <div class="project">
-                <h2>Project 2: Business Site</h2>
-                <p>Coming soon...</p>
+
+            <h1>Applicant Dashboard</h1>
+            <div class="profile-card">
+                <p style="text-align: center;">Application Number:</p>
+                <div class="app-number">{app_num}</div>
+                
+                <img src="/static/uploads/{passport}" alt="Passport">
+                <h2 style="text-align: center;">Welcome, {name}!</h2>
+                
+                <div class="info">
+                    <p><b>Email:</b> {email}</p>
+                    <p><b>Phone:</b> {phone}</p>
+                    <p><b>Date of Birth:</b> {dob}</p>
+                    <p><b>Gender:</b> {gender}</p>
+                    <p><b>Marital Status:</b> {marital}</p>
+                    <p><b>Religion:</b> {religion}</p>
+                    <p><b>State:</b> {state}</p>
+                    <p><b>LGA:</b> {lga}</p>
+                    <p><b>Country:</b> {country}</p>
+                    <p><b>Mode of ID:</b> {id_type}</p>
+                    <p><b>Nature of Work:</b> {work}</p>
+                    <p><b>Status:</b> Active</p>
+                </div>
             </div>
-            <br>
-            <a href="/">Home</a> | <a href="/about">About</a> | <a href="/services">Services</a> | <a href="/blog">Blog</a> | <a href="/testimonials">Testimonials</a> | <a href="/contact">Contact</a>
         </body>
     </html>
     """
-
 @app.route("/blog")
 def blog():
     return """
